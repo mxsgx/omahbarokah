@@ -55,9 +55,12 @@ class UserController extends Controller
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function create(Request $request)
     {
+        Gate::authorize('edit-users', $request->user());
+
         return view('user.create');
     }
 
@@ -74,18 +77,31 @@ class UserController extends Controller
         return redirect()->route('admin.user.edit', compact('user'))->with('success', 'Berhasil membuat pengguna baru.');
     }
 
+    /**
+     * @param Request $request
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function show(Request $request)
     {
-        // TODO: Show user profile
+        Gate::authorize('edit-users', $request->user());
+
+        return abort(503, 'Maaf halaman ini belum tersedia.');
     }
 
     /**
      * @param Request $request
      * @param User $user
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View|\Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(Request $request, User $user)
     {
+        Gate::authorize('edit-users', $request->user());
+
+        if ($user->id === $request->user()->id) {
+            return redirect()->route('profile.edit');
+        }
+
         return view('user.edit', compact('user'));
     }
 
@@ -94,9 +110,12 @@ class UserController extends Controller
      * @param User $user
      * @return \Illuminate\Http\RedirectResponse
      * @throws \Illuminate\Validation\ValidationException
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(UserRequest $request, User $user)
     {
+        Gate::authorize('edit-users', $request->user());
+
         $data = $request->all(['name', 'role', 'email']);
 
         if ($user->email != $request->get('email')) {
@@ -115,10 +134,25 @@ class UserController extends Controller
     public function profile(Request $request)
     {
         // TODO: Show profile current logged user or guest profile.
+        return abort(503, 'Maaf halaman ini belum tersedia.');
     }
 
     public function editProfile(Request $request)
     {
         // TODO: Show edit profile page
+        return abort(503, 'Maaf halaman ini belum tersedia.');
+    }
+
+    public function delete(Request $request, User $user)
+    {
+        Gate::authorize('edit-users', $request->user());
+
+        if ($user->id === $request->user()->id) {
+            return abort(503, 'Tidak dapat menghapus pengguna ini.');
+        }
+
+        $user->forceDelete();
+
+        return redirect()->route('admin.user.index')->with('success', 'Berhasil menghapus pengguna.');
     }
 }
