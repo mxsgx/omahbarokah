@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\User::findOrNew(1, [
+        \App\User::create([
             'name' => 'Admin',
             'email' => 'admin@omahbarokah.com',
             'password' => Hash::make('omahbarokah'),
