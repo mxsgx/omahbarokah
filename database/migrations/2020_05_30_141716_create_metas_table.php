@@ -19,7 +19,7 @@ class CreateMetasTable extends Migration
                 'user', 'product',
             ]);
             $table->bigInteger('ref_id');
-            $table->string('key', 255)->index();
+            $table->string('key')->index();
             $table->longText('value')->nullable();
             $table->timestamps();
         });
