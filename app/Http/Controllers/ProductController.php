@@ -172,21 +172,21 @@ class ProductController extends Controller
     /**
      * @param Request $request
      * @param Product $product
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return void
      */
     public function show(Request $request, Product $product)
     {
-        return view('product.show', compact('product'));
+        return abort(503, 'Maaf halaman ini belum tersedia.');
     }
 
     /**
      * @param Request $request
      * @param Product $product
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return void
      */
     public function detail(Request $request, Product $product)
     {
-        return view('product.detail', compact('product'));
+        return abort(503, 'Maaf halaman ini belum tersedia.');
     }
 
     /**
