@@ -15,7 +15,7 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->index();
+            $table->string('name')->index();
             $table->unsignedInteger('stock')->default(0);
             $table->decimal('price', 10, 0)->unsigned()->default(0);
             $table->longText('description')->nullable();
